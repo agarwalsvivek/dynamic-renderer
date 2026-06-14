@@ -1,0 +1,25 @@
+{
+  "name": "dynamic-renderer",
+  "version": "1.0.0",
+  "description": "Schema-driven dynamic table and chart renderer for React + TypeScript",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "sass-embedded": "^1.100.0",
+    "typescript": "^5.5.0",
+    "vite": "^7.0.0"
+  }
+}

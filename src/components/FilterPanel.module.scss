@@ -1,0 +1,76 @@
+.container {
+  border: 0.5px solid rgba(136, 135, 128, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: var(--color-background-secondary, #f9f9f7);
+}
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.filterGroup {
+  // No specific styles needed, div container
+}
+
+.label {
+  font-size: 11px;
+  color: #888780;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.input,
+.select {
+  width: 100%;
+  font-size: 12px;
+}
+
+.rangeContainer {
+  // No specific styles needed, div container
+}
+
+.rangeHint {
+  font-size: 10px;
+  color: #888780;
+  margin-bottom: 3px;
+}
+
+.rangeInputsWrapper {
+  display: flex;
+  gap: 4px;
+}
+
+.rangeInput {
+  width: 50%;
+  font-size: 12px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.buttonBase {
+  font-size: 12px;
+  padding: 5px 14px;
+}
+
+.buttonClear {
+  @extend .buttonBase;
+  background: none;
+  border: 1px solid #ccc;
+}
+
+.buttonApply {
+  @extend .buttonBase;
+  background: #e6f1fb;
+  color: #0c447c;
+  border: 0.5px solid #185fa5;
+  border-radius: 8px;
+}
