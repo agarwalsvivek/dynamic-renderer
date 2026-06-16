@@ -4,6 +4,7 @@ import { CellRenderer } from "../utils/cellRenderers";
 import { useActionDispatch } from "../utils/actionHandlers";
 import { useTableState } from "../hooks/useTableState";
 import { FilterPanel } from "./FilterPanel";
+import styles from "./DataTable.module.scss";
 
 interface DataTableProps {
   manifest: TableManifest;
@@ -46,76 +47,33 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
   const end = Math.min(page * pageSize, totalRows);
 
   return (
-    <div style={{ fontFamily: "var(--font-sans, system-ui, sans-serif)" }}>
+    <div className={styles.container}>
       {/* ── Toolbar ── */}
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          alignItems: "center",
-          flexWrap: "wrap",
-          marginBottom: 10,
-        }}
-      >
+      <div className={styles.toolbar}>
         {/* Global search */}
-        <div style={{ position: "relative", flex: 1, minWidth: 160 }}>
-          <span
-            style={{
-              position: "absolute",
-              left: 9,
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#888780",
-              fontSize: 14,
-              pointerEvents: "none",
-            }}
-          >
-            ⌕
-          </span>
+        <div className={styles.searchWrapper}>
+          <span className={styles.searchIcon}>⌕</span>
           <input
             type="text"
             placeholder="Search all columns…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ paddingLeft: 28, width: "100%", fontSize: 12 }}
+            className={styles.searchInput}
           />
         </div>
 
         {/* Filter toggle */}
         <button
           onClick={() => setFilterPanelOpen((v) => !v)}
-          style={{
-            fontSize: 12,
-            padding: "0 12px",
-            height: 36,
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-          }}
+          className={`${styles.toolbarButton} ${styles.filter} ${filterCount > 0 ? styles.hasFilters : ""}`}
         >
           ⚙ Filters
-          {filterCount > 0 && (
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#378ADD",
-                display: "inline-block",
-              }}
-            />
-          )}
         </button>
 
         {/* Reset */}
         <button
           onClick={clearAll}
-          style={{
-            fontSize: 12,
-            padding: "0 12px",
-            height: 36,
-            color: "#888780",
-          }}
+          className={`${styles.toolbarButton} ${styles.reset}`}
         >
           ↺ Reset
         </button>
@@ -124,7 +82,7 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
-          style={{ fontSize: 12, height: 36 }}
+          className={styles.pageSelect}
         >
           {[5, 10, 25, 50].map((n) => (
             <option key={n} value={n}>
@@ -136,14 +94,7 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
 
       {/* ── Active filter chips ── */}
       {(filterCount > 0 || searchQuery) && (
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 6,
-            marginBottom: 10,
-          }}
-        >
+        <div className={styles.filterChips}>
           {Object.entries(filters).map(([key, f]) => {
             const col = manifest.columns.find((c) => c.key === key);
             const label = col?.label ?? key;
@@ -152,35 +103,12 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
                 ? `${f.min ?? ""}–${f.max ?? ""}`
                 : (f as { value: string }).value;
             return (
-              <div
-                key={key}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  fontSize: 11,
-                  padding: "3px 10px",
-                  borderRadius: 20,
-                  background: "#E6F1FB",
-                  color: "#0C447C",
-                  border: "0.5px solid #185FA5",
-                }}
-              >
+              <div key={key} className={styles.chip}>
                 {label}: <strong>{val}</strong>
                 <button
                   onClick={() => removeFilter(key)}
                   aria-label={`remove ${label} filter`}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#0C447C",
-                    fontSize: 13,
-                    padding: 0,
-                    lineHeight: 1,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
+                  className={styles.chipRemoveButton}
                 >
                   ×
                 </button>
@@ -188,31 +116,11 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
             );
           })}
           {searchQuery && (
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                fontSize: 11,
-                padding: "3px 10px",
-                borderRadius: 20,
-                background: "#E6F1FB",
-                color: "#0C447C",
-                border: "0.5px solid #185FA5",
-              }}
-            >
+            <div className={styles.chip}>
               Search: <strong>{searchQuery}</strong>
               <button
                 onClick={() => setSearchQuery("")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#0C447C",
-                  fontSize: 13,
-                  padding: 0,
-                  lineHeight: 1,
-                }}
+                className={styles.chipRemoveButton}
               >
                 ×
               </button>
@@ -234,21 +142,8 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
       )}
 
       {/* ── Table ── */}
-      <div
-        style={{
-          overflowX: "auto",
-          border: "0.5px solid rgba(136,135,128,0.15)",
-          borderRadius: 12,
-        }}
-      >
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontSize: 12,
-            tableLayout: "fixed",
-          }}
-        >
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
           <thead>
             <tr>
               {manifest.columns.map((col) => {
@@ -262,18 +157,8 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
                   <th
                     key={col.key}
                     onClick={() => col.sortable && setSort(col.key)}
-                    style={{
-                      width: col.width ?? 100,
-                      fontWeight: 500,
-                      fontSize: 11,
-                      color: isActive ? "#185FA5" : "#888780",
-                      textAlign: "left",
-                      padding: "8px 12px",
-                      borderBottom: "0.5px solid rgba(136,135,128,0.15)",
-                      whiteSpace: "nowrap",
-                      cursor: col.sortable ? "pointer" : "default",
-                      userSelect: "none",
-                    }}
+                    style={{ width: col.width ?? 100 }}
+                    className={`${styles.tableHeader} ${col.sortable ? styles.sortable : ""} ${isActive ? styles.active : ""}`}
                   >
                     {col.label}
                     {indicator}
@@ -286,38 +171,20 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
           <tbody>
             {pagedRows.length === 0 ? (
               <tr>
-                <td
-                  colSpan={manifest.columns.length}
-                  style={{
-                    padding: 32,
-                    textAlign: "center",
-                    color: "#888780",
-                    fontSize: 13,
-                  }}
-                >
+                <td colSpan={manifest.columns.length} className={styles.emptyState}>
                   No results match your filters
                 </td>
               </tr>
             ) : (
               pagedRows.map((row, ri) => (
-                <tr
-                  key={String(row.id ?? ri)}
-                  style={{ borderBottom: "0.5px solid rgba(136,135,128,0.15)" }}
-                >
+                <tr key={String(row.id ?? ri)} className={styles.tableRow}>
                   {manifest.columns.map((col) => {
                     const clickable = !!col.action || col.type === "link_btn";
                     return (
                       <td
                         key={col.key}
                         onClick={() => clickable && dispatch(col, row)}
-                        style={{
-                          padding: "7px 12px",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          verticalAlign: "middle",
-                          cursor: clickable ? "pointer" : "default",
-                        }}
+                        className={`${styles.tableCell} ${clickable ? styles.clickable : ""}`}
                       >
                         <CellRenderer
                           value={row[col.key]}
@@ -335,18 +202,7 @@ export const DataTable: React.FC<DataTableProps> = ({ manifest, onAction }) => {
       </div>
 
       {/* ── Footer: row count + pagination ── */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 8,
-          marginTop: 10,
-          fontSize: 12,
-          color: "#888780",
-        }}
-      >
+      <div className={styles.footerSection}>
         <span>
           {totalRows === 0
             ? "No results"
@@ -376,23 +232,6 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const btnStyle = (active: boolean): React.CSSProperties => ({
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    border: active
-      ? "0.5px solid #185FA5"
-      : "0.5px solid rgba(136,135,128,0.3)",
-    background: active ? "#E6F1FB" : "transparent",
-    color: active ? "#0C447C" : "#888780",
-    fontSize: 12,
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontFamily: "inherit",
-  });
-
   const pages: (number | "…")[] = [];
   for (let i = 1; i <= totalPages; i++) {
     if (
@@ -408,9 +247,9 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+    <div className={styles.paginationContainer}>
       <button
-        style={btnStyle(false)}
+        className={styles.paginationButton}
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
         aria-label="previous page"
@@ -420,16 +259,13 @@ const Pagination: React.FC<PaginationProps> = ({
 
       {pages.map((p, i) =>
         p === "…" ? (
-          <span
-            key={`ellipsis-${i}`}
-            style={{ padding: "0 4px", color: "#888780" }}
-          >
+          <span key={`ellipsis-${i}`} className={styles.paginationEllipsis}>
             …
           </span>
         ) : (
           <button
             key={p}
-            style={btnStyle(page === p)}
+            className={`${styles.paginationButton} ${page === p ? styles.active : ""}`}
             onClick={() => onPageChange(p as number)}
           >
             {p}
@@ -438,7 +274,7 @@ const Pagination: React.FC<PaginationProps> = ({
       )}
 
       <button
-        style={btnStyle(false)}
+        className={styles.paginationButton}
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
         aria-label="next page"

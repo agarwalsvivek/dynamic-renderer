@@ -1,8 +1,8 @@
-import React from 'react';
-import { ActionEvent, Manifest } from '../types';
-import { DataTable } from './DataTable';
-import { ChartRenderer } from './ChartRenderer';
-import styles from './cell-dynamic-renderer.module.scss';
+import React from "react";
+import { ActionEvent, Manifest } from "../types";
+import { DataTable } from "./DataTable";
+import { ChartRenderer } from "./ChartRenderer";
+import styles from "./DynamicRenderer.module.scss";
 
 interface DynamicRendererProps {
   /** The manifest JSON from your LLM or API. */
@@ -48,16 +48,14 @@ export const DynamicRenderer: React.FC<DynamicRendererProps> = ({
       )}
 
       {/* Route to correct renderer */}
-      {manifest.renderType === 'table' && (
+      {manifest.renderType === "table" && (
         <DataTable manifest={manifest} onAction={onAction} />
       )}
 
-      {manifest.renderType === 'chart' && (
-        <ChartRenderer manifest={manifest} />
-      )}
+      {manifest.renderType === "chart" && <ChartRenderer manifest={manifest} />}
 
       {/* Unknown type fallback */}
-      {manifest.renderType !== 'table' && manifest.renderType !== 'chart' && (
+      {manifest.renderType !== "table" && manifest.renderType !== "chart" && (
         <div className={styles.unknownType}>
           Unknown renderType: "{(manifest as Manifest).renderType}"
         </div>
@@ -67,7 +65,9 @@ export const DynamicRenderer: React.FC<DynamicRendererProps> = ({
       {showDebug && (
         <details className={styles.debugPanel}>
           <summary className={styles.debugSummary}>Raw manifest</summary>
-          <pre className={styles.debugPre}>{JSON.stringify(manifest, null, 2)}</pre>
+          <pre className={styles.debugPre}>
+            {JSON.stringify(manifest, null, 2)}
+          </pre>
         </details>
       )}
     </div>
