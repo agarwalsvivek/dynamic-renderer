@@ -2,6 +2,7 @@ import React from 'react';
 import { ActionEvent, Manifest } from '../types';
 import { DataTable } from './DataTable';
 import { ChartRenderer } from './ChartRenderer';
+import styles from './cell-dynamic-renderer.module.scss';
 
 interface DynamicRendererProps {
   /** The manifest JSON from your LLM or API. */
@@ -37,18 +38,12 @@ export const DynamicRenderer: React.FC<DynamicRendererProps> = ({
   const displayTitle = title ?? manifest.title;
 
   return (
-    <div style={{ fontFamily: 'var(--font-sans, system-ui, sans-serif)' }}>
+    <div className={styles.root}>
       {/* Header */}
       {displayTitle && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 500, margin: 0 }}>{displayTitle}</h2>
-          <span style={{
-            fontSize: 11, padding: '2px 10px', borderRadius: 20,
-            background: '#E6F1FB', color: '#0C447C',
-            border: '0.5px solid #185FA5',
-          }}>
-            {manifest.renderType}
-          </span>
+        <div className={styles.header}>
+          <h2 className={styles.title}>{displayTitle}</h2>
+          <span className={styles.renderTypeBadge}>{manifest.renderType}</span>
         </div>
       )}
 
@@ -63,24 +58,16 @@ export const DynamicRenderer: React.FC<DynamicRendererProps> = ({
 
       {/* Unknown type fallback */}
       {manifest.renderType !== 'table' && manifest.renderType !== 'chart' && (
-        <div style={{ padding: 20, color: '#D85A30', fontSize: 13 }}>
+        <div className={styles.unknownType}>
           Unknown renderType: "{(manifest as Manifest).renderType}"
         </div>
       )}
 
       {/* Debug panel */}
       {showDebug && (
-        <details style={{ marginTop: 16 }}>
-          <summary style={{ fontSize: 11, color: '#888780', cursor: 'pointer', userSelect: 'none' }}>
-            Raw manifest
-          </summary>
-          <pre style={{
-            fontSize: 11, background: '#F1EFE8', padding: 12, borderRadius: 8,
-            overflow: 'auto', maxHeight: 300, marginTop: 6,
-            color: '#2C2C2A', fontFamily: 'var(--font-mono, monospace)',
-          }}>
-            {JSON.stringify(manifest, null, 2)}
-          </pre>
+        <details className={styles.debugPanel}>
+          <summary className={styles.debugSummary}>Raw manifest</summary>
+          <pre className={styles.debugPre}>{JSON.stringify(manifest, null, 2)}</pre>
         </details>
       )}
     </div>

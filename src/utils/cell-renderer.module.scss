@@ -1,0 +1,104 @@
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+
+  &.success { background: #e1f5ee; color: #085041; }
+  &.danger  { background: #fcebeb; color: #791f1f; }
+  &.warning { background: #faeeda; color: #633806; }
+  &.info    { background: #e6f1fb; color: #0c447c; }
+  &.gray    { background: #f1efe8; color: #444441; }
+}
+
+.percentUp {
+  color: #1d9e75;
+  font-weight: 500;
+}
+
+.percentDown {
+  color: #d85a30;
+  font-weight: 500;
+}
+
+.progressCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(136, 135, 128, 0.2);
+  overflow: hidden;
+  min-width: 40px;
+}
+
+.progressFill {
+  height: 5px;
+  border-radius: 3px;
+
+  &.high { background: #1d9e75; }
+  &.mid  { background: #ba7517; }
+  &.low  { background: #d85a30; }
+}
+
+.progressLabel {
+  font-size: 11px;
+  color: #888780;
+  min-width: 28px;
+}
+
+.sparklineCell {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 22px;
+}
+
+.sparklineEmpty {
+  color: #888780;
+}
+
+.sparklineBar {
+  width: 5px;
+  border-radius: 1px;
+
+  &.up   { background: #1d9e75; }
+  &.down { background: #d85a30; }
+}
+
+.avatarCell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e6f1fb;
+  color: #0c447c;
+  font-size: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dateText {
+  color: #888780;
+}
+
+.linkBtn {
+  color: #185fa5;
+  cursor: pointer;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

@@ -3,6 +3,7 @@ import { DynamicRenderer } from "./components/DynamicRenderer";
 import { actionRegistry } from "./utils/actionHandlers";
 import { PRESETS } from "./data/presets";
 import { ActionEvent, Manifest } from "./types";
+import styles from "./App.module.scss";
 
 // ─── Register custom action handlers (override defaults) ───────────────────────
 actionRegistry.register("drilldown", ({ event, row }) => {
@@ -68,45 +69,20 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 900,
-        margin: "0 auto",
-        padding: "24px 16px",
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
+    <div className={styles.container}>
       {/* Page title */}
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 500, margin: "0 0 4px" }}>
-          Dynamic render engine
-        </h1>
-        <p style={{ fontSize: 13, color: "#888780", margin: 0 }}>
-          Schema in → table or chart out
-        </p>
+      <div className={styles.headerSection}>
+        <h1 className={styles.title}>Dynamic render engine</h1>
+        <p className={styles.subtitle}>Schema in → table or chart out</p>
       </div>
 
       {/* Preset selector */}
-      <div
-        style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}
-      >
+      <div className={styles.presetSelector}>
         {presetKeys.map((key) => (
           <button
             key={key}
             onClick={() => handlePreset(key)}
-            style={{
-              fontSize: 12,
-              padding: "5px 14px",
-              borderRadius: 20,
-              cursor: "pointer",
-              border:
-                activePreset === key
-                  ? "0.5px solid #185FA5"
-                  : "0.5px solid rgba(136,135,128,0.3)",
-              background: activePreset === key ? "#E6F1FB" : "transparent",
-              color: activePreset === key ? "#0C447C" : "#888780",
-              fontFamily: "inherit",
-            }}
+            className={`${styles.presetButton} ${activePreset === key ? styles.active : ""}`}
           >
             {key}
           </button>
@@ -114,34 +90,12 @@ export default function App() {
       </div>
 
       {/* Two-column: JSON editor + parsed schema */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 12,
-          marginBottom: 16,
-        }}
-      >
-        <div
-          style={{
-            border: "0.5px solid rgba(136,135,128,0.3)",
-            borderRadius: 12,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              color: "#888780",
-              padding: "6px 12px",
-              borderBottom: "0.5px solid rgba(136,135,128,0.15)",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+      <div className={styles.editorGrid}>
+        <div className={styles.editorPanel}>
+          <div className={styles.panelHeader}>
             <span>manifest.json</span>
             {jsonError && (
-              <span style={{ color: "#D85A30" }}>
+              <span className={styles.errorMessage}>
                 ⚠ {jsonError.split("\n")[0]}
               </span>
             )}
@@ -150,38 +104,13 @@ export default function App() {
             value={jsonInput}
             onChange={(e) => handleJsonChange(e.target.value)}
             spellCheck={false}
-            style={{
-              width: "100%",
-              border: "none",
-              outline: "none",
-              resize: "none",
-              fontSize: 11,
-              fontFamily: "monospace",
-              padding: "10px 12px",
-              background: "#f9f9f7",
-              color: "#2C2C2A",
-              height: 200,
-              display: "block",
-            }}
+            className={`${styles.textarea} ${styles.input}`}
           />
         </div>
 
-        <div
-          style={{
-            border: "0.5px solid rgba(136,135,128,0.3)",
-            borderRadius: 12,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              color: "#888780",
-              padding: "6px 12px",
-              borderBottom: "0.5px solid rgba(136,135,128,0.15)",
-            }}
-          >
-            parsed schema
+        <div className={styles.editorPanel}>
+          <div className={styles.panelHeader}>
+            <span>parsed schema</span>
           </div>
           <textarea
             readOnly
@@ -209,33 +138,14 @@ export default function App() {
               null,
               2,
             )}
-            style={{
-              width: "100%",
-              border: "none",
-              outline: "none",
-              resize: "none",
-              fontSize: 11,
-              fontFamily: "monospace",
-              padding: "10px 12px",
-              background: "#f9f9f7",
-              color: "#888780",
-              height: 200,
-              display: "block",
-            }}
+            className={`${styles.textarea} ${styles.readonly}`}
           />
         </div>
       </div>
 
       {/* Renderer output */}
-      <div
-        style={{
-          border: "0.5px solid rgba(136,135,128,0.15)",
-          borderRadius: 12,
-          padding: "12px 16px",
-          marginBottom: 16,
-        }}
-      >
-        <div style={{ fontSize: 11, color: "#888780", marginBottom: 10 }}>
+      <div className={styles.outputSection}>
+        <div className={styles.outputLabel}>
           output · {manifest.renderType} · {manifest.data.length} rows
         </div>
         <DynamicRenderer
@@ -246,41 +156,14 @@ export default function App() {
       </div>
 
       {/* Action log */}
-      <div
-        style={{
-          border: "0.5px solid rgba(136,135,128,0.15)",
-          borderRadius: 12,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            fontSize: 11,
-            color: "#888780",
-            padding: "6px 12px",
-            borderBottom: "0.5px solid rgba(136,135,128,0.15)",
-          }}
-        >
-          action log
-        </div>
-        <div
-          style={{
-            maxHeight: 130,
-            overflowY: "auto",
-            padding: "6px 12px",
-            background: "#f9f9f7",
-            fontFamily: "monospace",
-            fontSize: 11,
-          }}
-        >
+      <div className={styles.logSection}>
+        <div className={styles.logHeader}>action log</div>
+        <div className={styles.logContent}>
           {log.length === 0 ? (
-            <div style={{ color: "#888780" }}>— waiting for cell actions —</div>
+            <div className={styles.logEmpty}>— waiting for cell actions —</div>
           ) : (
             log.map((entry) => (
-              <div
-                key={entry.id}
-                style={{ color: "#185FA5", margin: "2px 0", lineHeight: 1.5 }}
-              >
+              <div key={entry.id} className={styles.logEntry}>
                 {entry.timestamp} [{entry.type}] {entry.event} → "{entry.target}
                 "
               </div>

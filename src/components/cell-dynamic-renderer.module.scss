@@ -1,0 +1,56 @@
+.root {
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.renderTypeBadge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  background: #e6f1fb;
+  color: #0c447c;
+  border: 0.5px solid #185fa5;
+}
+
+.unknownType {
+  padding: 20px;
+  color: #d85a30;
+  font-size: 13px;
+}
+
+.debugPanel {
+  margin-top: 16px;
+}
+
+.debugSummary {
+  font-size: 11px;
+  color: #888780;
+  cursor: pointer;
+  user-select: none;
+}
+
+.debugPre {
+  font-size: 11px;
+  background: #f1efe8;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 300px;
+  margin-top: 6px;
+  color: #2c2c2a;
+  font-family: var(--font-mono, monospace);
+}

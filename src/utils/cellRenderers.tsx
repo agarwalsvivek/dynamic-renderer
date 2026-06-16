@@ -1,23 +1,6 @@
 import React from 'react';
 import { BadgeVariant, CellType, ColumnSchema } from '../types';
-
-// ─── Badge ────────────────────────────────────────────────────────────────────
-
-const BADGE_STYLES: Record<BadgeVariant, React.CSSProperties> = {
-  success: { background: '#E1F5EE', color: '#085041' },
-  danger:  { background: '#FCEBEB', color: '#791F1F' },
-  warning: { background: '#FAEEDA', color: '#633806' },
-  info:    { background: '#E6F1FB', color: '#0C447C' },
-  gray:    { background: '#F1EFE8', color: '#444441' },
-};
-
-const badgeStyle: React.CSSProperties = {
-  display: 'inline-block',
-  fontSize: 11,
-  padding: '2px 8px',
-  borderRadius: 10,
-  fontWeight: 500,
-};
+import styles from './cell-renderer.module.scss';
 
 // ─── Individual cell renderers ────────────────────────────────────────────────
 
@@ -43,7 +26,7 @@ export function PercentChangeCell({ value }: { value: unknown }): React.ReactEle
   const v = parseFloat(String(value));
   const up = v >= 0;
   return (
-    <span style={{ color: up ? '#1D9E75' : '#D85A30', fontWeight: 500 }}>
+    <span className={up ? styles.percentUp : styles.percentDown}>
       {up ? '▲' : '▼'} {Math.abs(v * 100).toFixed(2)}%
     </span>
   );
@@ -58,40 +41,36 @@ export function BadgeCell({
 }): React.ReactElement {
   const val = String(value ?? '');
   const variant: BadgeVariant = (col.badgeMap?.[val] as BadgeVariant) ?? 'gray';
-  return <span style={{ ...badgeStyle, ...BADGE_STYLES[variant] }}>{val}</span>;
+  return <span className={`${styles.badge} ${styles[variant]}`}>{val}</span>;
 }
 
 export function ProgressCell({ value }: { value: unknown }): React.ReactElement {
   const v = Math.min(100, Math.max(0, parseFloat(String(value))));
-  const color = v >= 75 ? '#1D9E75' : v >= 50 ? '#BA7517' : '#D85A30';
+  const fillClass = v >= 75 ? styles.high : v >= 50 ? styles.mid : styles.low;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'rgba(136,135,128,0.2)', overflow: 'hidden', minWidth: 40 }}>
-        <div style={{ width: `${v}%`, height: 5, borderRadius: 3, background: color }} />
+    <div className={styles.progressCell}>
+      <div className={styles.progressTrack}>
+        <div className={`${styles.progressFill} ${fillClass}`} style={{ width: `${v}%` }} />
       </div>
-      <span style={{ fontSize: 11, color: '#888780', minWidth: 28 }}>{Math.round(v)}%</span>
+      <span className={styles.progressLabel}>{Math.round(v)}%</span>
     </div>
   );
 }
 
 export function SparklineCell({ value }: { value: unknown }): React.ReactElement {
   const arr = Array.isArray(value) ? (value as number[]) : [];
-  if (!arr.length) return <span style={{ color: '#888780' }}>—</span>;
+  if (!arr.length) return <span className={styles.sparklineEmpty}>—</span>;
   const mn = Math.min(...arr);
   const mx = Math.max(...arr);
   const range = mx - mn || 1;
-  const trend = arr[arr.length - 1] >= arr[0] ? '#1D9E75' : '#D85A30';
+  const trendClass = arr[arr.length - 1] >= arr[0] ? styles.up : styles.down;
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height: 22 }}>
+    <div className={styles.sparklineCell}>
       {arr.map((v, i) => (
         <div
           key={i}
-          style={{
-            width: 5,
-            height: Math.round(((v - mn) / range) * 18 + 4),
-            borderRadius: 1,
-            background: trend,
-          }}
+          className={`${styles.sparklineBar} ${trendClass}`}
+          style={{ height: Math.round(((v - mn) / range) * 18 + 4) }}
         />
       ))}
     </div>
@@ -102,18 +81,8 @@ export function AvatarTextCell({ value }: { value: unknown }): React.ReactElemen
   const name = String(value ?? '');
   const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-      <div
-        style={{
-          width: 24, height: 24, borderRadius: '50%',
-          background: '#E6F1FB', color: '#0C447C',
-          fontSize: 10, fontWeight: 500,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}
-      >
-        {initials}
-      </div>
+    <div className={styles.avatarCell}>
+      <div className={styles.avatar}>{initials}</div>
       <span>{name}</span>
     </div>
   );
@@ -123,7 +92,7 @@ export function DateCell({ value }: { value: unknown }): React.ReactElement {
   try {
     const d = new Date(String(value));
     return (
-      <span style={{ color: '#888780' }}>
+      <span className={styles.dateText}>
         {d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
       </span>
     );
@@ -134,7 +103,7 @@ export function DateCell({ value }: { value: unknown }): React.ReactElement {
 
 export function LinkBtnCell({ col }: { col: ColumnSchema }): React.ReactElement {
   return (
-    <span style={{ color: '#185FA5', cursor: 'pointer', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+    <span className={styles.linkBtn}>
       {col.label2 ?? 'View'}
     </span>
   );
