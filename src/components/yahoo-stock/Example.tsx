@@ -81,16 +81,20 @@ function Example() {
       {/* Multi-series, normalized to % change — good for comparing tickers
           at very different price levels. */}
       <StockChart
-        title="Big tech · 1 year performance"
-        mode="percent"
-        series={sampleSeries}
+        config={{
+          title: "Big tech · 1 year performance",
+          mode: "percent",
+          series: sampleSeries,
+        }}
       />
 
       {/* Single series, raw price values. */}
       <StockChart
-        title="AAPL · 1 year price"
-        mode="value"
-        series={[sampleSeries[0]]}
+        config={{
+          title: "AAPL · 1 year price",
+          mode: "value",
+          series: [sampleSeries[0]],
+        }}
       />
     </div>
   );
